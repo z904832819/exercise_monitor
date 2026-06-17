@@ -1,0 +1,19 @@
+.container {
+  padding: 32rpx;
+}
+.auth {
+  margin-top: 80rpx;
+}
+.auth-tabs {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 22rpx;
+}
+.auth-tabs .btn,
+.auth-tabs .btn-ghost {
+  flex: 1;
+}
+.message.notice {
+  color: #0f6b56;
+  background: #ecfbf2;
+}

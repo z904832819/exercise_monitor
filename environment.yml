@@ -1,0 +1,6 @@
+name: exercise_monitor
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - nodejs=22

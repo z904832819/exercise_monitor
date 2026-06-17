@@ -1,0 +1,11 @@
+.thread-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.thread-title {
+  align-items: center;
+  justify-content: space-between;
+}

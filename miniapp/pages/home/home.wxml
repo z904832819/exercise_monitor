@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="section header">
+    <view class="title">FitAgent {{ greeting }}</view>
+    <view class="card-meta">欢迎回来，继续打卡今天的健康节奏</view>
+
+    <view class="section-actions">
+      <button class="btn" bindtap="openPage" data-url="/pages/profile/profile">目标设置</button>
+      <button class="btn btn-ghost" bindtap="openPage" data-url="/pages/chat/chat">智能对话</button>
+    </view>
+  </view>
+
+  <view wx:if="{{ error }}" class="section message">{{ error }}</view>
+
+  <view class="section">
+    <view class="title">今日营养汇总</view>
+    <view class="row-grid">
+      <view class="list-item">
+        <view class="card-meta">热量</view>
+        <view class="title">{{ summary.calories }} kcal</view>
+      </view>
+      <view class="list-item">
+        <view class="card-meta">蛋白</view>
+        <view class="title">{{ summary.protein }} g</view>
+      </view>
+      <view class="list-item">
+        <view class="card-meta">碳水</view>
+        <view class="title">{{ summary.carbs }} g</view>
+      </view>
+      <view class="list-item">
+        <view class="card-meta">脂肪</view>
+        <view class="title">{{ summary.fat }} g</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="title">训练与目标</view>
+    <view class="list-item">
+      <view class="card-meta">目标热量</view>
+      <view class="title">{{ target ? target.calorieGoal : 0 }} kcal</view>
+    </view>
+    <view class="list-item">
+      <view class="card-meta">今日活动消耗</view>
+      <view class="title">{{ summary.activeCalories }} kcal</view>
+    </view>
+    <view class="list-item">
+      <view class="card-meta">今日运动记录</view>
+      <view class="title">{{ summary.workouts }} 条</view>
+    </view>
+  </view>
+
+  <view class="section-actions">
+    <button class="btn btn-ghost" bindtap="openPage" data-url="/pages/food/food">食物识别</button>
+    <button class="btn btn-ghost" bindtap="openPage" data-url="/pages/health/health">健康同步</button>
+  </view>
+
+  <button class="btn" bindtap="logout">退出登录</button>
+</view>

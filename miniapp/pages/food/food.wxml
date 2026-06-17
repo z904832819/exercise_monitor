@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="section">
+    <view class="title">食物识别与记录</view>
+
+    <view class="field">
+      <view class="label">日期</view>
+      <input class="input" type="date" value="{{ date }}" bindchange="setDate" />
+    </view>
+
+    <view class="field">
+      <view class="label">餐次</view>
+      <view class="section-actions">
+        <button class="btn {{ mealType === 'breakfast' ? '' : 'btn-ghost' }}" data-type="breakfast" bindtap="setMealType">早餐</button>
+        <button class="btn {{ mealType === 'lunch' ? '' : 'btn-ghost' }}" data-type="lunch" bindtap="setMealType">午餐</button>
+        <button class="btn {{ mealType === 'dinner' ? '' : 'btn-ghost' }}" data-type="dinner" bindtap="setMealType">晚餐</button>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">食物线索</view>
+      <input class="input" placeholder="例如 牛肉饭" value="{{ foodName }}" bindinput="setFoodName" />
+    </view>
+
+    <view class="section-actions">
+      <button class="btn {{ imagePath ? '' : 'btn-ghost' }}" bindtap="chooseImage">选择图片</button>
+      <button class="btn" bindtap="analyzeFood" loading="{{ analyzing }}">识别食物</button>
+    </view>
+    <view wx:if="{{ imagePath }}" class="card-meta">{{ imageName }}</view>
+
+    <view wx:if="{{ analysis }}" class="list-item">
+      <view class="title">{{ analysis.name }}</view>
+      <view class="card-meta">{{ analysis.calories }} kcal | 蛋白 {{ analysis.protein }} | 碳水 {{ analysis.carbs }} | 脂肪 {{ analysis.fat }}</view>
+      <view wx:if="{{ analysis.advice }}" class="card-meta">{{ analysis.advice }}</view>
+      <button class="btn" bindtap="saveMeal" loading="{{ saving }}">记录到当日</button>
+    </view>
+
+    <view class="list-item">
+      <view class="card-meta">今日累计摄入</view>
+      <view class="title">{{ selectedCalories }} kcal</view>
+    </view>
+
+    <view class="section">
+      <view class="title">当日餐食清单</view>
+      <view wx:if="{{ !dailyMeals || dailyMeals.length === 0 }}" class="card-meta">当前日期还没有餐食记录</view>
+      <block wx:for="{{ dailyMeals }}" wx:key="id">
+        <view class="list-item">
+          <view>
+            <view class="title">{{ item.name }}</view>
+            <view class="card-meta">{{ item.calories }} kcal · {{ item.mealType }}</view>
+          </view>
+          <button class="btn-ghost" data-id="{{ item.id }}" bindtap="deleteMeal">删除</button>
+        </view>
+      </block>
+    </view>
+
+    <view wx:if="{{ error }}" class="message">{{ error }}</view>
+  </view>
+</view>

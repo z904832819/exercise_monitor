@@ -1,0 +1,29 @@
+{
+  "desc": "FitAgent 小程序",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "pages/home/home"
+    },
+    {
+      "action": "allow",
+      "page": "pages/chat/chat"
+    },
+    {
+      "action": "allow",
+      "page": "pages/profile/profile"
+    },
+    {
+      "action": "allow",
+      "page": "pages/auth/auth"
+    },
+    {
+      "action": "allow",
+      "page": "pages/food/food"
+    },
+    {
+      "action": "allow",
+      "page": "pages/health/health"
+    }
+  ]
+}

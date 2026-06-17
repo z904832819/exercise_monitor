@@ -1,0 +1,55 @@
+<view class="container">
+  <view class="section">
+    <view class="title">对话列表</view>
+    <view class="section-actions">
+      <view class="input">当前智能体：{{ activeThreadAgent }}</view>
+    </view>
+
+    <view class="list-item thread-title">
+      <view>请选择对话或创建新会话</view>
+      <button class="btn" bindtap="createThread">新建对话</button>
+    </view>
+
+    <scroll-view scroll-y="true" style="max-height: 260rpx;">
+      <block wx:for="{{ threads }}" wx:key="id">
+        <view class="thread-item" bindtap="refreshThread" data-thread-id="{{ item.id }}">
+          <view class="title">{{ item.title }}</view>
+          <view class="card-meta">{{ item.agentId }} · {{ item.messageCount }}条</view>
+          <button class="btn-ghost" data-thread-id="{{ item.id }}" bindtap="deleteThread">删除</button>
+        </view>
+      </block>
+      <view wx:if="{{ !threads || !threads.length }}" class="card-meta">暂无对话，点击“新建对话”</view>
+    </scroll-view>
+  </view>
+
+  <view class="section">
+    <view class="title">智能体选项</view>
+    <scroll-view scroll-x="true" style="white-space: nowrap;">
+      <block wx:for="{{ agents }}" wx:key="id">
+        <button class="btn {{ selectedAgentId === item.id ? '' : 'btn-ghost' }}" data-agent-id="{{ item.id }}" bindtap="setAgent" style="margin-right: 16rpx;">
+          {{ item.shortName }}
+        </button>
+      </block>
+    </scroll-view>
+  </view>
+
+  <view class="section" style="display:flex;flex-direction:column;flex:1;min-height:420rpx;">
+    <view class="title">消息</view>
+    <scroll-view style="max-height:340rpx;" scroll-y="true">
+      <block wx:for="{{ messages }}" wx:key="id">
+        <view class="list-item">
+          <view class="card-meta">{{ item.role === 'user' ? '我' : '智能体' }}</view>
+          <view>{{ item.content }}</view>
+        </view>
+      </block>
+      <view wx:if="{{ !messages || !messages.length }}" class="card-meta">还没有消息，先发一条吧</view>
+    </scroll-view>
+
+    <view class="section-actions">
+      <input class="input" placeholder="输入问题" value="{{ inputText }}" bindinput="onInput" />
+      <button class="btn" bindtap="send" loading="{{ sending }}">发送</button>
+      <button class="btn btn-ghost" bindtap="clearCurrentThread">清空</button>
+    </view>
+    <view wx:if="{{ error }}" class="message">{{ error }}</view>
+  </view>
+</view>

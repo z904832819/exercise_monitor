@@ -1,0 +1,71 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: exercise-monitor:latest
+    container_name: exercise_monitor_app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 8787
+      DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL in .env}
+      RAG_DATABASE_URL: ${RAG_DATABASE_URL:?set RAG_DATABASE_URL in .env}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      AGENT_AUTH_MODE: ${AGENT_AUTH_MODE:-off}
+      AGENT_ACTIVE_PROVIDER: ${AGENT_ACTIVE_PROVIDER:-}
+      AGENT_ACTIVE_VISION_PROVIDER: ${AGENT_ACTIVE_VISION_PROVIDER:-}
+      CCSWITCH_ACTIVE_PROVIDER: ${CCSWITCH_ACTIVE_PROVIDER:-}
+      CCSWITCH_ACTIVE_VISION_PROVIDER: ${CCSWITCH_ACTIVE_VISION_PROVIDER:-}
+      CCSWITCH_PROVIDERS_JSON: ${CCSWITCH_PROVIDERS_JSON:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      ANTHROPIC_AUTH_TOKEN: ${ANTHROPIC_AUTH_TOKEN:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-}
+      ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-}
+      GEMINI_BASE_URL: ${GEMINI_BASE_URL:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-}
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-}
+    ports:
+      - '${APP_PORT:-8787}:8787'
+    volumes:
+      - exercise_monitor_uploads:/app/tmp/uploads
+    healthcheck:
+      test: ['CMD-SHELL', "node -e \"fetch('http://127.0.0.1:8787/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  postgres:
+    image: ${POSTGRES_IMAGE:-pgvector/pgvector:pg16}
+    container_name: exercise_monitor_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-exercise_monitor}
+      POSTGRES_USER: ${POSTGRES_USER:-exercise_monitor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    ports:
+      - '127.0.0.1:${POSTGRES_PORT:-55432}:5432'
+    volumes:
+      - exercise_monitor_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  exercise_monitor_pgdata:
+  exercise_monitor_uploads:

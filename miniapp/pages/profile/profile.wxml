@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="section">
+    <view class="title">个人资料</view>
+
+    <view class="field">
+      <view class="label">身高（cm）</view>
+      <input class="input" type="number" value="{{ profile.heightCm }}" data-field="heightCm" bindinput="setField" placeholder="例如：170" />
+    </view>
+
+    <view class="field">
+      <view class="label">体重（kg）</view>
+      <input class="input" type="number" value="{{ profile.weightKg }}" data-field="weightKg" bindinput="setField" placeholder="例如：65" />
+    </view>
+
+    <view class="field">
+      <view class="label">年龄</view>
+      <input class="input" type="number" value="{{ profile.age }}" data-field="age" bindinput="setField" placeholder="例如：30" />
+    </view>
+
+    <view class="field">
+      <view class="label">性别</view>
+      <picker mode="selector" range="{{ ['male','female'] }}" value="{{ profile.sex === 'female' ? 1 : 0 }}" bindchange="setPickerValue" data-field="sex" data-options="male,female">
+        <view class="input">{{ profile.sex }}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">活动水平</view>
+      <picker mode="selector" range="{{ ['low','medium','high'] }}" value="{{ profile.activityLevel === 'low' ? 0 : profile.activityLevel === 'high' ? 2 : 1 }}" bindchange="setPickerValue" data-field="activityLevel" data-options="low,medium,high">
+        <view class="input">{{ profile.activityLevel }}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">目标</view>
+      <picker mode="selector" range="{{ ['fat_loss', 'maintain', 'muscle_gain'] }}" value="{{ profile.goal === 'fat_loss' ? 0 : profile.goal === 'muscle_gain' ? 2 : 1 }}" bindchange="setPickerValue" data-field="goal" data-options="fat_loss,maintain,muscle_gain">
+        <view class="input">{{ profile.goal }}</view>
+      </picker>
+    </view>
+
+    <button class="btn" bindtap="generateTarget" loading="{{ saving }}">生成营养目标</button>
+
+    <view wx:if="{{ error }}" class="message">{{ error }}</view>
+
+    <view wx:if="{{ target }}" class="section">
+      <view class="title">目标结果</view>
+      <view class="list-item">
+        <view class="card-meta">热量目标</view>
+        <view class="title">{{ target.calorieGoal }} kcal</view>
+      </view>
+      <view class="list-item">
+        <view class="card-meta">蛋白 / 碳水 / 脂肪</view>
+        <view class="title">{{ target.proteinGoal }} / {{ target.carbsGoal }} / {{ target.fatGoal }}</view>
+      </view>
+      <view class="card-meta">{{ target.summary }}</view>
+    </view>
+  </view>
+</view>

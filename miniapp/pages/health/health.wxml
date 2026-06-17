@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="section">
+    <view class="title">健康数据同步</view>
+
+    <view class="field">
+      <view class="label">查询日期</view>
+      <input class="input" type="date" value="{{ date }}" bindchange="setDate" />
+    </view>
+
+    <view class="section-actions">
+      <button class="btn" bindtap="chooseFile">选择 Apple 健康导出文件</button>
+      <button class="btn {{ filePath ? '' : 'btn-ghost' }}" bindtap="importHealth" loading="{{ importing }}">导入/更新</button>
+      <button class="btn-ghost" bindtap="queryDay" loading="{{ querying }}">查询当天</button>
+    </view>
+
+    <view wx:if="{{ fileName }}" class="card-meta">当前文件: {{ fileName }}</view>
+
+    <view wx:if="{{ summary }}" class="list-item">
+      <view class="card-meta">数据范围</view>
+      <view class="title">{{ summary.range.from }} - {{ summary.range.to }}</view>
+      <view class="card-meta">当前日期: {{ summary.selectedDay.date || summary.selectedDate }}</view>
+    </view>
+
+    <view wx:if="{{ source }}" class="list-item">
+      <view class="card-meta">数据源</view>
+      <view class="title">{{ source }}</view>
+    </view>
+
+    <view class="list-item">
+      <view class="card-meta">运动数据</view>
+      <view class="title">{{ summary && summary.selectedDay ? summary.selectedDay.steps || 0 : 0 }} 步 · {{ summary && summary.selectedDay ? summary.selectedDay.exerciseMinutes || 0 : 0 }} 分钟</view>
+      <view class="card-meta">消耗 {{ summary && summary.selectedDay ? summary.selectedDay.activeCalories || 0 : summary && summary.activeCalories || 0 }} kcal</view>
+    </view>
+
+    <view class="section">
+      <view class="title">运动记录</view>
+      <block wx:for="{{ workouts }}" wx:key="index">
+        <view class="list-item">
+          <view class="title">{{ item.name }}</view>
+          <view class="card-meta">{{ item.minutes }} 分钟 · {{ item.calories }} kcal</view>
+        </view>
+      </block>
+      <view wx:if="{{ !workouts || !workouts.length }}" class="card-meta">暂无运动记录</view>
+    </view>
+
+    <view wx:if="{{ advice }}" class="list-item">
+      <view class="title">健康建议</view>
+      <view class="card-meta">{{ advice.summary }}</view>
+    </view>
+
+    <view wx:if="{{ error }}" class="message">{{ error }}</view>
+  </view>
+</view>

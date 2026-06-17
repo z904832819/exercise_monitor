@@ -1,0 +1,36 @@
+<view class="container">
+  <view class="section auth">
+    <view class="title">FitAgent</view>
+    <view class="auth-tabs">
+      <button class="btn {{ mode === 'login' ? '' : 'btn-ghost' }}" bindtap="setMode" data-mode="login">登录</button>
+      <button class="btn {{ mode === 'register' ? '' : 'btn-ghost' }}" bindtap="setMode" data-mode="register">注册</button>
+    </view>
+
+    <view class="field">
+      <view class="label">用户名</view>
+      <input class="input" type="text" value="{{ username }}" maxlength="40" data-field="username" bindinput="setField" placeholder="输入用户名" />
+    </view>
+
+    <view wx:if="{{ mode === 'register' }}" class="field">
+      <view class="label">昵称</view>
+      <input class="input" type="text" value="{{ displayName }}" maxlength="40" data-field="displayName" bindinput="setField" placeholder="输入昵称" />
+    </view>
+
+    <view class="field">
+      <view class="label">密码</view>
+      <input class="input" type="password" value="{{ password }}" maxlength="128" data-field="password" bindinput="setField" placeholder="输入密码" />
+    </view>
+
+    <view wx:if="{{ mode === 'register' }}" class="field">
+      <view class="label">确认密码</view>
+      <input class="input" type="password" value="{{ confirmPassword }}" maxlength="128" data-field="confirmPassword" bindinput="setField" placeholder="再次输入密码" />
+    </view>
+
+    <view wx:if="{{ error }}" class="message">{{ error }}</view>
+    <view wx:if="{{ notice }}" class="message notice">{{ notice }}</view>
+
+    <button class="btn" bindtap="submit" loading="{{ loading }}">
+      {{ mode === 'login' ? '登录' : '创建账号' }}
+    </button>
+  </view>
+</view>
